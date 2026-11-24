@@ -25,4 +25,12 @@ uv run ruff --version
 uv run pytest --version
 ```
 
-之後執行專案 Python 程式時，使用 `uv run python ...` 以選用專案虛擬環境。`pytest` 測試和資料稽核命令會在對應任務實作後加入。
+之後執行專案 Python 程式時，使用 `uv run python ...` 以選用專案虛擬環境。執行目前的離線依賴匯入測試與程式碼檢查：
+
+```bash
+uv run pytest -q
+uv run ruff check .
+uv run ruff format --check .
+```
+
+資料稽核命令會在 `DATA-001` 實作後加入。

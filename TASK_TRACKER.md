@@ -16,7 +16,7 @@
 | Last verified Git commit | `153794e1dcea187a0a2225e6a23d2342bc1a4510`（REPO-001 程式與文件） |
 | Last passing tests | `uv run pytest -q`：5 passed；`uv run ruff check .` 與 `uv run ruff format --check .` 通過 |
 | Next task after active | Gate A 決策後，依結果進行 `DATA-003` 或 `DATA-002` |
-| Last session summary | DATA-001 已查得 TechQA 資料集完整 commit SHA 並寫入 `configs/data.yaml`；資料下載與稽核待執行 |
+| Last session summary | 固定 revision 的 `train` 共 910 筆，其中 `is_impossible=true` 300 筆、空答案 2 筆、空 contexts 300 筆；完整稽核與版本化 raw snapshot 待執行 |
 
 ## 任務清單
 
@@ -68,6 +68,16 @@
 | C — release | model/index 相容、品質/安全 gate pass、人工批准嗎？ | `PENDING` | — |
 
 ## 每次 Session Log（新一筆加在最上面）
+
+### 2026-11-24 — DATA-001 初次資料載入
+
+- **Goal:** 用固定 revision 載入資料集並確認實際列數與來源 schema。
+- **Changed files:** 使用者新增 `scripts/inspect_dataset.py`；本次更新 `README.md`、`TASK_TRACKER.md`。
+- **Commands executed and actual results:** 使用者在 WSL Ubuntu 執行 `uv run python scripts/inspect_dataset.py`。Hugging Face 下載 `README.md` 與 `train.json` 至本機快取，產生 `train` split，共 910 筆。欄位為 `id`、`question`、`answer`、`is_impossible`、`contexts`。`contexts` 的 feature 為含 `filename`、`text` 兩個字串欄位的 List。使用者加上三項計數後重新執行，得到 `is_impossible=true` 300 筆、答案為空值或去除空白後為空字串 2 筆、`contexts` 為空值或空清單 300 筆。
+- **Evidence:** 使用者提供的終端機輸出、`configs/data.yaml` 中固定的 revision `0b5bbc84b7f07d6d09d063130e90b716d8d4a32a`、`scripts/inspect_dataset.py`。
+- **Blocker / risks:** 三個計數尚未做逐筆交叉比對，不能僅憑總數相同就認定不可回答題都沒有 contexts。其他 null、重複與 context 統計、版本化 raw snapshot、人工 relevance 審核仍待完成。Hub 提示未認證請求可能受較低速率限制，本次下載已成功。
+- **Status change:** `IN_PROGRESS` 維持；DATA-001 尚未驗收。
+- **Next single task:** 繼續 DATA-001 的資料品質統計與稽核報告。
 
 ### 2026-11-24 — DATA-001（進行中）
 

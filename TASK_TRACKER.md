@@ -1,22 +1,22 @@
 # TechQA RAG MLOps — Task Tracker
 
 > 更新日期：2026-11-24  
-> **目前階段：ENV-001 已驗收**
-> **當前唯一任務：REPO-001**；完成後進行 `DATA-001`。
+> **目前階段：ENV-001、REPO-001 已驗收**
+> **當前唯一任務：DATA-001**。
 > 指令與驗收見 [`EXECUTION_GUIDE.md`](EXECUTION_GUIDE.md)。**每次開工先讀本檔。**
 
 ## Dashboard（每次結束工作務必更新）
 
 | 欄位 | 目前內容 |
 |---|---|
-| Active task | `REPO-001` |
+| Active task | `DATA-001` |
 | Status | `TODO` |
-| Completed | `1 / 19`（以表格任務 ID 為準） |
-| Current blocker | 無；PyTorch/CUDA 待建立 Python 環境後驗證 |
-| Last verified Git commit | `159a9fc1c5bf4e8d5d1f54fe16176c3cdffad7ac`（本地 clone） |
-| Last passing tests | 尚無 |
-| Next task after active | `DATA-001` |
-| Last session summary | ENV-001 已完成環境與 Git clone 驗證，詳見 `reports/environment.md`；下一步 REPO-001 |
+| Completed | `2 / 19`（以表格任務 ID 為準） |
+| Current blocker | 無；PyTorch/CUDA 尚未驗證，資料稽核可先以 CPU 進行 |
+| Last verified Git commit | `153794e1dcea187a0a2225e6a23d2342bc1a4510`（REPO-001 程式與文件） |
+| Last passing tests | `uv run pytest -q`：5 passed；`uv run ruff check .` 與 `uv run ruff format --check .` 通過 |
+| Next task after active | Gate A 決策後，依結果進行 `DATA-003` 或 `DATA-002` |
+| Last session summary | REPO-001 已建立鎖檔、README、.gitignore 與離線 smoke test，實際檢查通過；下一步 DATA-001 |
 
 ## 任務清單
 
@@ -25,7 +25,7 @@
 ### Week 1：環境與資料稽核
 
 - [x] **ENV-001** — 檢查 WSL2、GPU、Python、Docker；證據：`reports/environment.md`；驗收：列出實際版本與 GPU 可用/限制。Git clone 已驗證；PyTorch/CUDA 待後續補充。
-- [ ] **REPO-001** — 建立 Git、Python 鎖檔、README、.gitignore、pytest/ruff；證據：first commit、lint/unit smoke test。
+- [x] **REPO-001** — 建立 Git、Python 鎖檔、README、.gitignore、pytest/ruff；證據：commits `f7cac19`、`464e3e4`、`153794e`，5 個 smoke tests 與 Ruff 檢查通過。
 - [ ] **DATA-001** — 下載 pinned TechQA，產生 audit markdown/json、抽樣 relevance 審核；證據：`reports/dataset_audit.*`、dataset hash。
 - [ ] **DATA-003**（若 Gate A 不過，必做）— 建 human-reviewed qrels 或合法獨立訓練來源；證據：label provenance 與 reviewer records。
 
@@ -68,6 +68,16 @@
 | C — release | model/index 相容、品質/安全 gate pass、人工批准嗎？ | `PENDING` | — |
 
 ## 每次 Session Log（新一筆加在最上面）
+
+### 2026-11-24 — REPO-001
+
+- **Goal:** 建立可重跑的 Python 依賴環境、專案入口與離線 smoke test。
+- **Changed files:** `pyproject.toml`、`uv.lock`、`README.md`、`.gitignore`、`tests/test_smoke.py`、`TASK_TRACKER.md`。
+- **Commands executed and actual results:** `uv lock --check` 解析 32 個套件；`uv sync --locked` 檢查 29 個已安裝套件；`uv run pytest -q` 為 5 passed；`uv run ruff check .` 為 All checks passed；`uv run ruff format --check .` 為 7 files already formatted；`git diff --cached --check` 通過。
+- **Evidence:** commits `f7cac19`（依賴與鎖檔）、`464e3e4`（README）、`153794e`（.gitignore、README 測試命令、smoke test）；本次工具輸出。
+- **Blocker / risks:** PyTorch/CUDA 尚未驗證；專案位於 Windows OneDrive 掛載路徑。DVC 任務需調整目前對 `data/raw/` 和 `data/processed/` 的排除規則。
+- **Status change:** `TODO → DONE`；active task 移至 `DATA-001`（`TODO`）。
+- **Next single task:** `DATA-001`。
 
 ### 2026-11-24 — ENV-001
 

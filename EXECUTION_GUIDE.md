@@ -246,7 +246,7 @@ from datasets import load_dataset
 from huggingface_hub import HfApi
 
 name = "nvidia/TechQA-RAG-Eval"
-revision = HfApi().dataset_info(name, repo_type="dataset").sha
+revision = HfApi().dataset_info(name).sha
 snapshot = load_dataset(name, revision=revision)
 print("revision:", revision)
 print("splits:", {k: len(v) for k, v in snapshot.items()})

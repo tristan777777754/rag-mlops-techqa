@@ -10,13 +10,13 @@
 | 欄位 | 目前內容 |
 |---|---|
 | Active task | `DATA-001` |
-| Status | `TODO` |
+| Status | `IN_PROGRESS` |
 | Completed | `2 / 19`（以表格任務 ID 為準） |
 | Current blocker | 無；PyTorch/CUDA 尚未驗證，資料稽核可先以 CPU 進行 |
 | Last verified Git commit | `153794e1dcea187a0a2225e6a23d2342bc1a4510`（REPO-001 程式與文件） |
 | Last passing tests | `uv run pytest -q`：5 passed；`uv run ruff check .` 與 `uv run ruff format --check .` 通過 |
 | Next task after active | Gate A 決策後，依結果進行 `DATA-003` 或 `DATA-002` |
-| Last session summary | REPO-001 已建立鎖檔、README、.gitignore 與離線 smoke test，實際檢查通過；下一步 DATA-001 |
+| Last session summary | DATA-001 已查得 TechQA 資料集完整 commit SHA 並寫入 `configs/data.yaml`；資料下載與稽核待執行 |
 
 ## 任務清單
 
@@ -68,6 +68,16 @@
 | C — release | model/index 相容、品質/安全 gate pass、人工批准嗎？ | `PENDING` | — |
 
 ## 每次 Session Log（新一筆加在最上面）
+
+### 2026-11-24 — DATA-001（進行中）
+
+- **Goal:** 先固定 TechQA 資料集來源版本。
+- **Changed files:** `configs/data.yaml`、`EXECUTION_GUIDE.md`、`TASK_TRACKER.md`。
+- **Commands executed and actual results:** 在已安裝的 `huggingface-hub 2.4.0` 檢查 `HfApi.dataset_info` 簽名，確認不接受 `repo_type`；呼叫 `HfApi().dataset_info("nvidia/TechQA-RAG-Eval").sha`，回傳 `0b5bbc84b7f07d6d09d063130e90b716d8d4a32a`。
+- **Evidence:** Hub API 查詢結果與 `configs/data.yaml`；修正執行指南的 API 範例。
+- **Blocker / risks:** 尚未下載 pinned snapshot、核對實際列數或執行人工 relevance 審核。
+- **Status change:** `TODO → IN_PROGRESS`；DATA-001 尚未驗收。
+- **Next single task:** 繼續 DATA-001 的資料下載與稽核。
 
 ### 2026-11-24 — REPO-001
 

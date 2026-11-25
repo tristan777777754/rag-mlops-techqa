@@ -2,7 +2,7 @@
 
 本專案規劃以 NVIDIA `nvidia/TechQA-RAG-Eval` 建立可重現的檢索與模型發布流程。預定先稽核資料與標註，再建立 BM25、向量及混合檢索基線，接著評估 embedding 微調、實驗追蹤與受控發布。
 
-`REPO-001` 專案環境建置已完成，目前正在進行 `DATA-001`。固定版本的原始資料與 corpus 已下載並產生稽核報告，人工 relevance 審核與 Gate A 決策仍待完成。實際進度請看 [TASK_TRACKER.md](TASK_TRACKER.md)，設計與執行順序請看 [PROJECT.md](PROJECT.md) 和 [EXECUTION_GUIDE.md](EXECUTION_GUIDE.md)。
+`REPO-001` 專案環境建置與 `DATA-001` 資料稽核已完成。固定版本的原始資料、corpus、稽核報告及 37 筆抽樣審核紀錄已保存；其中 34 筆為 AI 初審。來源標籤能否用於可信評估，仍待 Gate A 決策。實際進度請看 [TASK_TRACKER.md](TASK_TRACKER.md)，設計與執行順序請看 [PROJECT.md](PROJECT.md) 和 [EXECUTION_GUIDE.md](EXECUTION_GUIDE.md)。
 
 ## 開發環境
 

@@ -2,7 +2,7 @@
 
 本專案規劃以 NVIDIA `nvidia/TechQA-RAG-Eval` 建立可重現的檢索與模型發布流程。預定先稽核資料與標註，再建立 BM25、向量及混合檢索基線，接著評估 embedding 微調、實驗追蹤與受控發布。
 
-`REPO-001` 專案環境建置已完成，目前正在進行 `DATA-001` 資料稽核。已用固定 revision 首次讀取 TechQA 資料集並確認 910 筆資料及來源欄位；完整稽核、檢索基線、模型訓練與服務尚未完成。實際進度請看 [TASK_TRACKER.md](TASK_TRACKER.md)，設計與執行順序請看 [PROJECT.md](PROJECT.md) 和 [EXECUTION_GUIDE.md](EXECUTION_GUIDE.md)。
+`REPO-001` 專案環境建置已完成，目前正在進行 `DATA-001`。固定版本的原始資料與 corpus 已下載並產生稽核報告，人工 relevance 審核與 Gate A 決策仍待完成。實際進度請看 [TASK_TRACKER.md](TASK_TRACKER.md)，設計與執行順序請看 [PROJECT.md](PROJECT.md) 和 [EXECUTION_GUIDE.md](EXECUTION_GUIDE.md)。
 
 ## 開發環境
 
@@ -33,4 +33,18 @@ uv run ruff check .
 uv run ruff format --check .
 ```
 
-資料稽核命令會在 `DATA-001` 實作後加入。
+## 資料稽核
+
+資料來源是 [NVIDIA TechQA-RAG-Eval](https://huggingface.co/datasets/nvidia/TechQA-RAG-Eval)，資料卡標示 Apache-2.0 授權，內容源自 [IBM TechQA](https://github.com/ibm/techqa)。`configs/data.yaml` 固定資料集 commit。於專案根目錄執行：
+
+本次固定版本下載與雜湊驗證日期為 2026-11-25。資料卡寫 908 組問答，實際原始檔與載入結果均為 910 列；以實測為準。
+
+```bash
+uv run python scripts/audit_dataset.py
+```
+
+此命令下載該 commit 的 `train.json`、`corpus.zip`、資料卡與 `.gitattributes` 到 Git 排除的 `data/raw/`，計算來源檔 SHA-256，產生 [稽核報告](reports/dataset_audit.md)、`reports/dataset_audit.json`、`data/manifests/raw_snapshot.json` 與固定種子的 `data/manifests/relevance_review_sample.json`。人工審核表為 `reports/relevance_review.csv`，重跑稽核時會保留已填寫內容。包含原始問題、答案和 context 的審核包保存在 Git 排除的 `data/review/review_packets.json`。
+
+執行指令會核對 pinned revision、來源 schema、原始 JSON 列數與 Datasets loader 列數。人工審核欄位目前留空；稽核報告將來源 contexts 視為待確認的 relevance 候選。原始檔案未納入 Git，其他機器可用相同 config 重新下載並核對 manifest 中的雜湊。
+
+人工審核時，依 `query_id` 在本地審核包查 question、answer 和 contexts，將結果填入 `reports/relevance_review.csv`。可回答題判斷 context 是否切題及能否支持答案；不可回答題檢查標記是否合理，沒有 context 的兩個欄位填 `N/A`。每列填審核者與理由。判斷標準和待決事項見稽核報告的「人工審核樣本」。

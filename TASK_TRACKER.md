@@ -1,6 +1,6 @@
 # TechQA RAG MLOps — Task Tracker
 
-> 更新日期：2026-11-24  
+> 更新日期：2026-11-25
 > **目前階段：ENV-001、REPO-001 已驗收**
 > **當前唯一任務：DATA-001**。
 > 指令與驗收見 [`EXECUTION_GUIDE.md`](EXECUTION_GUIDE.md)。**每次開工先讀本檔。**
@@ -12,11 +12,11 @@
 | Active task | `DATA-001` |
 | Status | `IN_PROGRESS` |
 | Completed | `2 / 19`（以表格任務 ID 為準） |
-| Current blocker | 無；PyTorch/CUDA 尚未驗證，資料稽核可先以 CPU 進行 |
-| Last verified Git commit | `153794e1dcea187a0a2225e6a23d2342bc1a4510`（REPO-001 程式與文件） |
-| Last passing tests | `uv run pytest -q`：5 passed；`uv run ruff check .` 與 `uv run ruff format --check .` 通過 |
+| Current blocker | 37 筆抽樣的人工作答與 Gate A 判定待完成；來源標記不可直接當 gold label |
+| Last verified Git commit | DATA-001 稽核提交見 `git log -1`；前一筆 REPO-001 為 `153794e` |
+| Last passing tests | `uv run pytest -q`：12 passed；`uv run ruff check .`、`uv run ruff format --check .`、`uv lock --check` 通過 |
 | Next task after active | Gate A 決策後，依結果進行 `DATA-003` 或 `DATA-002` |
-| Last session summary | 固定 revision 的 `train` 共 910 筆，其中 `is_impossible=true` 300 筆、空答案 2 筆、空 contexts 300 筆；完整稽核與版本化 raw snapshot 待執行 |
+| Last session summary | 固定版本 raw snapshot、SHA-256 manifest、910 列完整稽核、corpus 核對與 37 筆人工審核表已建立；人工審核尚未填寫 |
 
 ## 任務清單
 
@@ -63,11 +63,91 @@
 
 | Gate | 必須回答的問題 | Decision | Evidence |
 |---|---|---|---|
-| A — data labels | contexts 能作為 relevant evidence 嗎？weak/gold 分得清楚嗎？ | `PENDING` | — |
+| A — data labels | contexts 能作為 relevant evidence 嗎？weak/gold 分得清楚嗎？ | `PENDING` | `reports/dataset_audit.md`、`reports/relevance_review.csv`；37 筆待人工審核 |
 | B — evaluation | 無 leakage，baseline 在 fixed corpus + val qrels 上可重跑嗎？ | `PENDING` | — |
 | C — release | model/index 相容、品質/安全 gate pass、人工批准嗎？ | `PENDING` | — |
 
 ## 每次 Session Log（新一筆加在最上面）
+
+### 2026-11-25 — DATA-001 固定來源與完整稽核
+
+- **Goal:** 完成可重跑的資料、corpus 稽核與人工 relevance 抽樣準備。
+- **Changed files:** 新增 `scripts/audit_dataset.py`、`tests/test_audit_dataset.py`、`data/manifests/raw_snapshot.json`、`data/manifests/relevance_review_sample.json`、`reports/dataset_audit.json`、`reports/relevance_review.csv`；更新 `reports/dataset_audit.md`、`README.md`、`.gitignore`、`pyproject.toml`、`scripts/inspect_dataset.py`（格式化）、`TASK_TRACKER.md`。
+- **Commands executed and actual results:** `uv run python scripts/audit_dataset.py` 取得固定 revision `0b5bbc84b7f07d6d09d063130e90b716d8d4a32a`，驗證 `train.json` 910 列、`corpus.zip` 28,481 個檔案、496 個來源 context 版本與 corpus 同名同內容；重跑後結果一致。
+- **Evidence:** 原始檔 SHA-256 與檔案大小見 `data/manifests/raw_snapshot.json`；資料品質統計見 `reports/dataset_audit.md` 和 `.json`；固定 seed 的 25 筆可回答、10 筆不可回答及 2 筆空答案異常見 `data/manifests/relevance_review_sample.json`；`reports/relevance_review.csv` 尚未填寫。
+- **Blocker / risks:** 資料卡寫 908 組問答，實際 raw JSON 與 loader 都是 910 列。29 組重複問題與 2 筆可回答但空答案需審慎處理。未有人工作答，不能宣稱 context 是 gold evidence 或通過 Gate A。
+- **Status change:** `IN_PROGRESS` 維持；待人工審核與 Gate A 決策。
+- **Next single task:** 由人依本地 `data/review/review_packets.json` 填寫 37 筆 `reports/relevance_review.csv`，彙整支持比例與錯誤案例，再決定 Gate A。
+
+### 2026-11-25 — DATA-001 重複群組欄位比對
+
+- **Goal:** 檢查 29 組相同問題文字的 contexts、答案字串與不可回答標記是否一致。
+- **Changed files:** 使用者更新 `scripts/inspect_dataset.py`；本次更新 `reports/dataset_audit.md`、`TASK_TRACKER.md`。
+- **Commands executed and actual results:** 使用者回報 29 組逐組比較結果。20 組的 contexts 清單與 `is_impossible` 相同，其中 6 組答案字串相同、14 組不同；另 9 組 contexts、答案字串與 `is_impossible` 都不同。答案經首尾空白處理後比較，尚未審核語義是否相同。
+- **Evidence:** 使用者提供的 29 行比較輸出；`reports/dataset_audit.md` 保存每組 ID 與三欄比較結果。
+- **Blocker / risks:** 同一問題文字可能配上不同 context 與可回答性標記。資料切分與評估政策需考慮這些群組，答案差異原因仍待審核。
+- **Status change:** `IN_PROGRESS` 維持；DATA-001 尚未驗收。
+- **Next single task:** 檢查 9 組標記不同的來源記錄及 context 數量。
+
+### 2026-11-25 — DATA-001 空答案配對 context 比對
+
+- **Goal:** 比對兩組空答案配對的 context 來源與內容指紋。
+- **Changed files:** 使用者更新 `scripts/inspect_dataset.py`；本次更新 `reports/dataset_audit.md`、`TASK_TRACKER.md`。
+- **Commands executed and actual results:** 使用者回報 `TRAIN_Q285` 與 `DEV_Q094` 均指向 `swg21638268.txt`，context 文字 SHA-256 均為 `3050b46301647fd661df65fb9719c524b6e0214f65e4d656ee410936bd03440e`；`TRAIN_Q299` 與 `DEV_Q014` 均指向 `swg21138332.txt`，SHA-256 均為 `ecad2a4b2bf1565824719657565af1a68e53931d6b2f7115453ce73116f0b965`。每組問題文字亦相同，但 DEV 前綴記錄的答案為空。
+- **Evidence:** 使用者提供的 `context source` 輸出與 `reports/dataset_audit.md` 中的配對表。
+- **Blocker / risks:** 其餘重複群組的 context 與答案關係、空答案成因及標註政策仍待核對。資料切分時需考慮這兩組相同問題與 context 的關係。
+- **Status change:** `IN_PROGRESS` 維持；DATA-001 尚未驗收。
+- **Next single task:** 彙總所有重複問題群組的 context 與答案差異。
+
+### 2026-11-25 — DATA-001 空答案配對欄位檢查
+
+- **Goal:** 補齊空問題數與兩組空答案配對的基本欄位統計。
+- **Changed files:** 使用者更新 `scripts/inspect_dataset.py`；本次更新 `reports/dataset_audit.md`、`TASK_TRACKER.md`。
+- **Commands executed and actual results:** 使用者執行 `uv run python scripts/inspect_dataset.py`，回報 `empty questions: 0`、`duplicate question groups: 29`。`TRAIN_Q285`、`TRAIN_Q299` 的答案分別有 172、433 個字元，配對的 `DEV_Q094`、`DEV_Q014` 答案均為 0 字元。四筆的 `is_impossible` 都是 `False`，每筆有 1 個 context。
+- **Evidence:** 使用者提供的完整終端機輸出與 `reports/dataset_audit.md` 的更新表格。
+- **Blocker / risks:** 尚未比較四筆的 context 檔名與內容，來源答案缺失原因仍待核對。其他欄位 null、context 分布、版本化 raw snapshot 與人工 relevance 審核仍待完成。
+- **Status change:** `IN_PROGRESS` 維持；DATA-001 尚未驗收。
+- **Next single task:** 比對兩組空答案配對的 context 來源與內容雜湊。
+
+### 2026-11-25 — DATA-001 重複問題群組
+
+- **Goal:** 保存正規化問題文字相同的來源 ID 群組，供後續資料切分檢查。
+- **Changed files:** 使用者更新 `scripts/inspect_dataset.py`；本次新增 `reports/dataset_audit.md` 並更新 `TASK_TRACKER.md`。
+- **Commands executed and actual results:** 使用者依正規化問題文字分組，提供 29 行群組輸出，每組有兩個不同 ID。依字面前綴整理，TRAIN / DEV 22 組、TRAIN / TRAIN 6 組、DEV / DEV 1 組。兩筆空答案 `DEV_Q014`、`DEV_Q094` 分別與 `TRAIN_Q299`、`TRAIN_Q285` 位於同一問題群組。
+- **Evidence:** 使用者提供的 29 組 ID、`scripts/inspect_dataset.py` 中的分組程式、`reports/dataset_audit.md` 的完整清單。
+- **Blocker / risks:** 尚未收到 `empty questions` 與 `duplicate question groups` 兩行總數輸出；目前清單有 29 組。ID 前綴的原始切分語義、群組答案與 contexts 的關係、近似重複問題及共享文件仍待核對。
+- **Status change:** `IN_PROGRESS` 維持；DATA-001 尚未驗收。
+- **Next single task:** 檢查重複群組中答案與 contexts 的對應關係，繼續 DATA-001 稽核。
+
+### 2026-11-25 — DATA-001 問題文字重複計數
+
+- **Goal:** 檢查不同來源 ID 是否對應重複的問題文字。
+- **Changed files:** 使用者更新 `scripts/inspect_dataset.py`；本次更新 `TASK_TRACKER.md`。
+- **Commands executed and actual results:** 使用者以 `casefold()`、`split()` 和空白重新連接來正規化 910 筆 `question`，再計算 `len(questions) - len(set(questions))`，回報 `duplicate question entries: 29`。此數字表示正規化後超出不同文字數量的筆數，尚未列出重複群組。
+- **Evidence:** 使用者提供的終端機輸出、`scripts/inspect_dataset.py` 中的正規化與計數、固定資料集 revision `0b5bbc84b7f07d6d09d063130e90b716d8d4a32a`。
+- **Blocker / risks:** 尚未確認 29 筆是否包含空問題、涉及幾組重複文字、對應哪些來源 ID 或 context。資料切分前需釐清這些重複關係。
+- **Status change:** `IN_PROGRESS` 維持；DATA-001 尚未驗收。
+- **Next single task:** 列出重複問題群組的來源 ID，繼續 DATA-001 稽核。
+
+### 2026-11-25 — DATA-001 空答案與 ID 檢查
+
+- **Goal:** 找出 2 筆空答案的來源 ID 與可回答性標記，並檢查來源 ID 唯一性。
+- **Changed files:** 使用者更新 `scripts/inspect_dataset.py`；本次更新 `TASK_TRACKER.md`。
+- **Commands executed and actual results:** 使用者重新執行檢查腳本，回報 `DEV_Q014`、`DEV_Q094` 的 `answer` 為空值或空白字串，兩筆的 `is_impossible` 都是 `False`。接著用 `len(ids) - len(set(ids))` 檢查 910 筆來源 ID，回報 `duplicate ID entries: 0`。
+- **Evidence:** 使用者提供的終端機輸出、`scripts/inspect_dataset.py` 中的空答案 ID 檢查、固定資料集 revision `0b5bbc84b7f07d6d09d063130e90b716d8d4a32a`。
+- **Blocker / risks:** 兩筆資料的標記與空答案並存，原因與後續處理方式待人工核對。問題文字重複、其他資料品質統計、版本化 raw snapshot 與人工 relevance 審核仍待完成。
+- **Status change:** `IN_PROGRESS` 維持；DATA-001 尚未驗收。
+- **Next single task:** 繼續 DATA-001 的資料品質稽核。
+
+### 2026-11-25 — DATA-001 不可回答題交叉比對
+
+- **Goal:** 確認 `is_impossible=true` 與空 contexts 的 300 筆是否為同一批資料。
+- **Changed files:** 使用者更新 `scripts/inspect_dataset.py`；本次更新 `TASK_TRACKER.md`。
+- **Commands executed and actual results:** 使用者重新執行檢查腳本，回報 `impossible and empty contexts: 300`、`answerable but empty contexts: 0`。結合先前實測的 `impossible: 300` 與 `empty contexts: 300`，確認在此固定 snapshot 中，空 contexts 恰好對應所有標為不可回答的題目。
+- **Evidence:** 使用者提供的終端機輸出、`scripts/inspect_dataset.py` 中的兩項交叉計數、`configs/data.yaml` 中的固定 revision。
+- **Blocker / risks:** `is_impossible` 是來源標記，尚未審核其語義與答案支持情形；其他 null、重複、context 統計及版本化 raw snapshot 仍待完成。
+- **Status change:** `IN_PROGRESS` 維持；DATA-001 尚未驗收。
+- **Next single task:** 繼續 DATA-001 的資料品質稽核。
 
 ### 2026-11-24 — DATA-001 初次資料載入
 

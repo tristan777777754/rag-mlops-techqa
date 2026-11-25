@@ -19,6 +19,7 @@ htmlcov/
 # Downloaded data and generated model files
 data/raw/
 data/processed/
+data/review/
 artifacts/models/
 artifacts/indexes/
 mlruns/

@@ -1,0 +1,28 @@
+{
+  "dataset_id": "nvidia/TechQA-RAG-Eval",
+  "files": {
+    ".gitattributes": {
+      "bytes": 2461,
+      "path": "data/raw/TechQA-RAG-Eval/0b5bbc84b7f07d6d09d063130e90b716d8d4a32a/.gitattributes",
+      "sha256": "e7a120ab07b1bc5b486be249e9fc6c83d59448d0093e1dfebe95d1566d9cafc0"
+    },
+    "README.md": {
+      "bytes": 2113,
+      "path": "data/raw/TechQA-RAG-Eval/0b5bbc84b7f07d6d09d063130e90b716d8d4a32a/README.md",
+      "sha256": "8d85191f81a748f2a66bb32cecb972727e69fcc0541c1f936c4debfa4823190b"
+    },
+    "corpus.zip": {
+      "bytes": 45814227,
+      "path": "data/raw/TechQA-RAG-Eval/0b5bbc84b7f07d6d09d063130e90b716d8d4a32a/corpus.zip",
+      "sha256": "c06aa287dcc1abf8db6b49b8495df095db73342d729f6451ac330785245d10be"
+    },
+    "train.json": {
+      "bytes": 4019332,
+      "path": "data/raw/TechQA-RAG-Eval/0b5bbc84b7f07d6d09d063130e90b716d8d4a32a/train.json",
+      "sha256": "69d97231509482ed6bd5ec1c4bc0607acb82a88d11169eb8383592d0ca8b93c7"
+    }
+  },
+  "license": "apache-2.0",
+  "revision": "0b5bbc84b7f07d6d09d063130e90b716d8d4a32a",
+  "schema_version": 1
+}

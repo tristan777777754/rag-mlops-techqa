@@ -1,22 +1,22 @@
 # TechQA RAG MLOps — Task Tracker
 
 > 更新日期：2026-11-25
-> **目前階段：ENV-001、REPO-001、DATA-001 已完成；Gate A 待決策**
-> **當前任務：無；下一個決策點為 Gate A**。
+> **目前階段：ENV-001、REPO-001、DATA-001 已完成；Gate A 對來源標籤作為 gold 的使用不放行**
+> **當前唯一任務：DATA-003**。
 > 指令與驗收見 [`EXECUTION_GUIDE.md`](EXECUTION_GUIDE.md)。**每次開工先讀本檔。**
 
 ## Dashboard（每次結束工作務必更新）
 
 | 欄位 | 目前內容 |
 |---|---|
-| Active task | 無；Gate A 決策待完成 |
-| Status | DATA-001 `DONE`；Gate A `PENDING` |
+| Active task | `DATA-003` |
+| Status | `IN_PROGRESS` |
 | Completed | `3 / 19`（以表格任務 ID 為準） |
-| Current blocker | 34 筆為 AI 初審；Gate A 尚未確認來源標籤能否用於可信評估 |
+| Current blocker | 尚無獨立人類確認的 qrels；34 筆 AI 初審不能當 gold labels |
 | Last verified Git commit | 以 `git log -1` 為準；DATA-001 審核證據提交為 `49620ee` |
 | Last passing tests | `uv run pytest -q`：12 passed；`uv run ruff check .`、`uv run ruff format --check .`、`uv lock --check` 通過 |
-| Next task after active | Gate A 決策後，依結果進行 `DATA-003` 或 `DATA-002` |
-| Last session summary | 使用者確認 DATA-001 已完成；稽核交付已齊，來源標籤的可信度留待 Gate A 判定 |
+| Next task after active | `DATA-002`（先建立可追溯的人工確認標註） |
+| Last session summary | Gate A 不放行來源 context 作 gold；使用者啟動 DATA-003，先設計人審 qrels 與標註來源紀錄 |
 
 ## 任務清單
 
@@ -27,7 +27,7 @@
 - [x] **ENV-001** — 檢查 WSL2、GPU、Python、Docker；證據：`reports/environment.md`；驗收：列出實際版本與 GPU 可用/限制。Git clone 已驗證；PyTorch/CUDA 待後續補充。
 - [x] **REPO-001** — 建立 Git、Python 鎖檔、README、.gitignore、pytest/ruff；證據：commits `f7cac19`、`464e3e4`、`153794e`，5 個 smoke tests 與 Ruff 檢查通過。
 - [x] **DATA-001** — 下載 pinned TechQA，產生 audit markdown/json、抽樣 relevance 審核；證據：`reports/dataset_audit.md`、`reports/dataset_audit.json`、`data/manifests/raw_snapshot.json`、`reports/relevance_review.csv`、`reports/relevance_review_summary.md`、12 個測試通過、commits `24ebee2` 與 `49620ee`。34 筆為 AI 初審；來源標籤是否可作 gold 由 Gate A 另行判定。
-- [ ] **DATA-003**（若 Gate A 不過，必做）— 建 human-reviewed qrels 或合法獨立訓練來源；證據：label provenance 與 reviewer records。
+- [ ] **DATA-003**（`IN_PROGRESS`）— 建 human-reviewed qrels 或合法獨立訓練來源；證據：label provenance 與 reviewer records。工作方案見 `docs/DATA003_LABEL_PLAN.md`。
 
 ### Week 2：資料合約與版本
 
@@ -63,11 +63,21 @@
 
 | Gate | 必須回答的問題 | Decision | Evidence |
 |---|---|---|---|
-| A — data labels | contexts 能作為 relevant evidence 嗎？weak/gold 分得清楚嗎？ | `PENDING` | `reports/relevance_review.csv`、`reports/relevance_review_summary.md`；34 筆 AI 初審待人類複核 |
+| A — data labels | contexts 能作為 relevant evidence 嗎？weak/gold 分得清楚嗎？ | `NO_GO_SOURCE_AS_GOLD` | `reports/relevance_review.csv`、`reports/relevance_review_summary.md`：1 筆明顯不切題、3 筆不確定、2 筆空答案及 34 筆 AI 初審；因此先進 `DATA-003`。此決策僅否定「直接當 gold」，未聲稱已有人工 gold qrels。 |
 | B — evaluation | 無 leakage，baseline 在 fixed corpus + val qrels 上可重跑嗎？ | `PENDING` | — |
 | C — release | model/index 相容、品質/安全 gate pass、人工批准嗎？ | `PENDING` | — |
 
 ## 每次 Session Log（新一筆加在最上面）
+
+### 2026-11-25 — Gate A 保守決策與 DATA-003 啟動
+
+- **Goal:** 保留來源標籤的弱標籤屬性，開始建立可追溯的人工確認 qrels。
+- **Changed files:** 更新 `TASK_TRACKER.md`、`README.md`；新增 `docs/DATA003_LABEL_PLAN.md`。
+- **Commands executed and actual results:** 核對 DATA-001 審核摘要與執行指南。25 筆有參考答案題中 1 筆 context 明顯不切題、3 筆不確定；另有 2 筆可回答但答案空白。34 筆為 AI 初審，無法當成獨立人類驗證集。本次只更新工作文件，未執行新的資料處理程式或測試。
+- **Evidence:** `reports/relevance_review.csv`、`reports/relevance_review_summary.md`；使用者於本次對話指定開始 `DATA-003`。
+- **Blocker / risks:** 尚無足夠人類確認的 qrels，不能對 TechQA 聲稱有效的 gold-based retrieval 指標；不確定的題目需排除或複核。
+- **Status change:** Gate A 記 `NO_GO_SOURCE_AS_GOLD`；`DATA-003` 設為 `IN_PROGRESS`，完成數仍為 `3 / 19`。
+- **Next single task:** 建立每筆候選標註的來源、審核者、判斷與狀態欄位，再由人逐筆確認可採用的 qrels。
 
 ### 2026-11-25 — DATA-001 完成狀態校正
 

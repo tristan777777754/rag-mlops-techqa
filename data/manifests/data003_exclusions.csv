@@ -1,0 +1,16 @@
+query_id,original_document_id,source_filename,reason_codes,local_review_status
+DEV_Q014,swg21138332,swg21138332.txt,empty_reference_answer|answer_span_mismatch,ai_preliminary
+DEV_Q029,swg21496354,swg21496354.txt,answer_span_mismatch,not_sampled
+DEV_Q038,swg21451229,swg21451229.txt,answer_span_mismatch,not_sampled
+DEV_Q067,swg21615427,swg21615427.txt,local_review_unsure,ai_preliminary
+DEV_Q094,swg21638268,swg21638268.txt,empty_reference_answer|answer_span_mismatch,ai_preliminary
+DEV_Q110,swg21220832,swg21220832.txt,local_review_unsure,ai_preliminary
+DEV_Q129,swg21962588,swg21962588.txt,answer_span_mismatch,not_sampled
+DEV_Q156,swg21998655,swg21998655.txt,answer_span_mismatch,not_sampled
+DEV_Q160,swg21163875,swg21163875.txt,answer_span_mismatch,not_sampled
+DEV_Q176,swg21578744,swg21578744.txt,local_review_no,ai_preliminary
+DEV_Q180,swg21964873,swg21964873.txt,answer_span_mismatch,not_sampled
+DEV_Q291,swg21639640,swg21639640.txt,answer_span_mismatch,not_sampled
+DEV_Q300,swg21438047,swg21438047.txt,answer_span_mismatch,not_sampled
+DEV_Q303,swg21690658,swg21690658.txt,answer_span_mismatch,not_sampled
+TRAIN_Q162,swg24041394,swg24041394.txt,local_review_unsure,ai_preliminary

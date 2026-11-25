@@ -1,22 +1,22 @@
 # TechQA RAG MLOps — Task Tracker
 
 > 更新日期：2026-11-25
-> **目前階段：ENV-001、REPO-001、DATA-001 已完成；Gate A 對來源標籤作為 gold 的使用不放行**
-> **當前唯一任務：DATA-003**。
+> **目前階段：ENV-001、REPO-001、DATA-001、DATA-003 已完成；Gate A 對 NVIDIA 來源 contexts 直接作 gold 的使用不放行**
+> **下一項任務：DATA-002**。
 > 指令與驗收見 [`EXECUTION_GUIDE.md`](EXECUTION_GUIDE.md)。**每次開工先讀本檔。**
 
 ## Dashboard（每次結束工作務必更新）
 
 | 欄位 | 目前內容 |
 |---|---|
-| Active task | `DATA-003` |
-| Status | `IN_PROGRESS` |
-| Completed | `3 / 19`（以表格任務 ID 為準） |
-| Current blocker | 尚無獨立人類確認的 qrels；34 筆 AI 初審不能當 gold labels |
-| Last verified Git commit | 以 `git log -1` 為準；DATA-001 審核證據提交為 `49620ee` |
-| Last passing tests | `uv run pytest -q`：12 passed；`uv run ruff check .`、`uv run ruff format --check .`、`uv lock --check` 通過 |
-| Next task after active | `DATA-002`（先建立可追溯的人工確認標註） |
-| Last session summary | Gate A 不放行來源 context 作 gold；使用者啟動 DATA-003，先設計人審 qrels 與標註來源紀錄 |
+| Active task | 無；下一項 `DATA-002` |
+| Status | `DATA-003 DONE`；`DATA-002 TODO` |
+| Completed | `4 / 19`（以表格任務 ID 為準） |
+| Current blocker | 尚無固定 split；595 筆只含已知正向文件，不能當成完整相關性標註 |
+| Last verified Git commit | 以 `git log -1` 為準；DATA-003 程式與報告見下方 session log |
+| Last passing tests | `uv run pytest -q`：17 passed；`uv run ruff check .`、`uv run ruff format --check .`、`uv lock --check` 通過 |
+| Next task after active | `DATA-002`：建立 documents/queries/qrels/chunks、固定 split 與防洩漏測試 |
+| Last session summary | DATA-003 對齊原始 TechQA 人工標註與 NVIDIA 版本，輸出 595 筆正向 qrels、15 筆排除、910 題原始候選範圍 |
 
 ## 任務清單
 
@@ -27,7 +27,7 @@
 - [x] **ENV-001** — 檢查 WSL2、GPU、Python、Docker；證據：`reports/environment.md`；驗收：列出實際版本與 GPU 可用/限制。Git clone 已驗證；PyTorch/CUDA 待後續補充。
 - [x] **REPO-001** — 建立 Git、Python 鎖檔、README、.gitignore、pytest/ruff；證據：commits `f7cac19`、`464e3e4`、`153794e`，5 個 smoke tests 與 Ruff 檢查通過。
 - [x] **DATA-001** — 下載 pinned TechQA，產生 audit markdown/json、抽樣 relevance 審核；證據：`reports/dataset_audit.md`、`reports/dataset_audit.json`、`data/manifests/raw_snapshot.json`、`reports/relevance_review.csv`、`reports/relevance_review_summary.md`、12 個測試通過、commits `24ebee2` 與 `49620ee`。34 筆為 AI 初審；來源標籤是否可作 gold 由 Gate A 另行判定。
-- [ ] **DATA-003**（`IN_PROGRESS`）— 建 human-reviewed qrels 或合法獨立訓練來源；證據：label provenance 與 reviewer records。工作方案見 `docs/DATA003_LABEL_PLAN.md`。
+- [x] **DATA-003**（`DONE`）— 對齊原始 TechQA 人工標註，建立可追溯的正向文件 qrels；證據：`data/manifests/original_techqa_snapshot.json`、`data/manifests/curated_upstream_qrels.csv`、`data/manifests/data003_exclusions.csv`、`data/manifests/original_candidate_pools.json`、`reports/data003_labels.md`、`docs/ADR-001-original-techqa-labels.md`。原始資料沒有逐列審核者身分；本地 34 筆 AI 初審只作保守排除。詳見 `docs/DATA003_LABEL_PLAN.md`。
 
 ### Week 2：資料合約與版本
 
@@ -63,11 +63,21 @@
 
 | Gate | 必須回答的問題 | Decision | Evidence |
 |---|---|---|---|
-| A — data labels | contexts 能作為 relevant evidence 嗎？weak/gold 分得清楚嗎？ | `NO_GO_SOURCE_AS_GOLD` | `reports/relevance_review.csv`、`reports/relevance_review_summary.md`：1 筆明顯不切題、3 筆不確定、2 筆空答案及 34 筆 AI 初審；因此先進 `DATA-003`。此決策僅否定「直接當 gold」，未聲稱已有人工 gold qrels。 |
+| A — data labels | contexts 能作為 relevant evidence 嗎？weak/gold 分得清楚嗎？ | `NO_GO_SOURCE_AS_GOLD` | `reports/relevance_review.csv`、`reports/relevance_review_summary.md`：1 筆明顯不切題、3 筆不確定、2 筆空答案及 34 筆 AI 初審；不能把 NVIDIA contexts 直接當 gold。`DATA-003` 另從原始 TechQA 人工標註核對並匯出 595 筆已知正向文件 qrels，來源與限制見 `reports/data003_labels.md`。 |
 | B — evaluation | 無 leakage，baseline 在 fixed corpus + val qrels 上可重跑嗎？ | `PENDING` | — |
 | C — release | model/index 相容、品質/安全 gate pass、人工批准嗎？ | `PENDING` | — |
 
 ## 每次 Session Log（新一筆加在最上面）
+
+### 2026-11-25 — DATA-003 原始人工標註對齊完成
+
+- **Goal:** 取得可追溯、可重建的原始 TechQA 文件級正向標註，並核對 NVIDIA 版本，保守排除異常列。
+- **Changed files:** 新增 `.gitattributes`、`scripts/extract_original_techqa.py`、`scripts/build_data003_labels.py`、`tests/test_data003_labels.py`、`docs/ADR-001-original-techqa-labels.md`、`data/manifests/original_techqa_snapshot.json`、`data/manifests/curated_upstream_qrels.csv`、`data/manifests/data003_exclusions.csv`、`data/manifests/original_candidate_pools.json`、`reports/data003_labels.md`、`reports/data003_labels.json`；更新 `docs/DATA003_LABEL_PLAN.md`、`reports/relevance_review.csv`、`reports/relevance_review_summary.md`、`README.md`、`TASK_TRACKER.md`。
+- **Commands executed and actual results:** 原始壓縮檔與 NVIDIA 固定版本均通過 SHA-256 核對；910 題的來源欄位一致，610 題可回答題的正確文件文字一致。11 題答案位置異常、4 題本地初審有疑慮，共排除 15 題，匯出 595 筆正向 qrels。重跑標註產物 SHA-256 完全一致，並以 `.gitattributes` 固定 Git 文字產物的 LF 換行。`uv run pytest -q` 為 17 passed；`uv run ruff check .`、`uv run ruff format --check .`、`uv lock --check`、`git diff --check` 均通過。
+- **Evidence:** `reports/data003_labels.md` 和 `.json` 記錄來源版本、雜湊、逐類計數及限制；`data/manifests/data003_exclusions.csv` 記錄 15 題排除原因。原始檔在 Git 排除的 `data/raw/`。
+- **Blocker / risks:** 原始資料未釋出逐列審核者資訊。595 筆僅為已知正向文件，沒有完整負標籤或本專案固定 split；300 題不可回答只適用原始候選文件範圍。不可用這些標籤直接宣稱完整 corpus 的 gold-based 評估。
+- **Status change:** DATA-003 `IN_PROGRESS → DONE`；完成數 `3 / 19 → 4 / 19`。Gate A 對 NVIDIA contexts 直接作 gold 的 `NO_GO_SOURCE_AS_GOLD` 決策不變。
+- **Next single task:** `DATA-002` 建立正式資料合約與文件、問題、qrels、chunks 的固定分組切分及洩漏測試。
 
 ### 2026-11-25 — Gate A 保守決策與 DATA-003 啟動
 

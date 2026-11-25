@@ -1,0 +1,59 @@
+{
+  "adapted_dataset_id": "nvidia/TechQA-RAG-Eval",
+  "adapted_dataset_revision": "0b5bbc84b7f07d6d09d063130e90b716d8d4a32a",
+  "adapted_train_sha256": "69d97231509482ed6bd5ec1c4bc0607acb82a88d11169eb8383592d0ca8b93c7",
+  "artifacts": {
+    "curated_upstream_qrels.csv": "df4c333f8e388c829b854ff1100d5c71e263b9dc0516a731fb31f9ec5832a7af",
+    "data003_exclusions.csv": "3c4aaff7591d55e506f87135eee3d5c22262d634319458c680e2142a2de5a78e",
+    "original_candidate_pools.json": "ce6dd89f5ee44319e00196819d2545c9dc51d1c70ff61b8941a80b623991a785"
+  },
+  "candidate_document_ids_missing_from_adapted_corpus": [
+    "swg21407330"
+  ],
+  "candidate_pool_49_query_ids": [
+    "DEV_Q177"
+  ],
+  "counts": {
+    "accepted_local_status_ai_preliminary": 18,
+    "accepted_local_status_local_human_assisted": 3,
+    "accepted_local_status_not_sampled": 574,
+    "accepted_positive_qrels": 595,
+    "candidate_documents_missing_from_adapted_corpus": 1,
+    "excluded_answer_span_mismatch": 11,
+    "excluded_answerable": 15,
+    "excluded_empty_reference_answer": 2,
+    "excluded_local_review_no": 1,
+    "excluded_local_review_unsure": 3,
+    "original_answerable": 610,
+    "original_candidate_pools_with_49_documents": 1,
+    "original_unanswerable": 300,
+    "total_queries": 910,
+    "unique_original_candidate_documents": 28461
+  },
+  "excluded_query_ids": [
+    "DEV_Q014",
+    "DEV_Q029",
+    "DEV_Q038",
+    "DEV_Q067",
+    "DEV_Q094",
+    "DEV_Q110",
+    "DEV_Q129",
+    "DEV_Q156",
+    "DEV_Q160",
+    "DEV_Q176",
+    "DEV_Q180",
+    "DEV_Q291",
+    "DEV_Q300",
+    "DEV_Q303",
+    "TRAIN_Q162"
+  ],
+  "label_methodology": "https://aclanthology.org/2020.acl-main.117.pdf",
+  "label_provenance": "Original TechQA human annotation team; specific per-row reviewer identities and dates were not released",
+  "local_review_csv_sha256": "fc432b03c4d14846361efb1b15be0e2cc67a3dac787ecebe9d8d0e467403e2ef",
+  "original_archive_sha256": "6b094ef9a69718f727ce8d7e15c4d961e51032cefaa952e0d6af9d176d7ba118",
+  "original_dataset_id": "PrimeQA/TechQA",
+  "original_dataset_revision": "60437bc79ab217679682217598a3693cab78365b",
+  "qrel_scope": "positive document-level labels only; known-label retrieval metrics, not exhaustive relevance",
+  "schema_version": 1,
+  "unanswerable_scope": "No answer found among each query's original DOC_IDS candidate pool; not a full-corpus negative label"
+}

@@ -1,30 +1,35 @@
-# DATA-003：建立可信的檢索標註
+# DATA-003：可信檢索標註
 
-**狀態：規劃中，尚未產生 gold qrels。** 來源為固定的 `nvidia/TechQA-RAG-Eval` revision `0b5bbc84b7f07d6d09d063130e90b716d8d4a32a`。Gate A 已決定不直接把來源 `contexts` 當 gold label；本任務先走「人類確認小型 qrels」路徑。若無法取得足夠可信的確認結果，再評估另有授權且具清楚標註來源的資料集。
+**狀態：DONE。** 本任務使用原始 TechQA 已由人類標註的文件 ID 與答案位置，對齊目前固定的 NVIDIA RAG 版本，再保守排除不一致或本地初審有疑慮的資料。完整實測見 `reports/data003_labels.md`，設計決策見 `docs/ADR-001-original-techqa-labels.md`。
 
-## 這個任務要產生什麼
+## 為什麼使用原始標註
 
-`qrels` 是「某個問題與某份文件是否相關」的逐對紀錄。DATA-001 的 `reports/relevance_review.csv` 是 **審核草稿**：37 筆中 34 筆是 AI 初審，不能自動升格為 `human_verified`。DATA-003 需要將確認過的判斷獨立保存，留下來源、審核者與判斷理由。之後 DATA-002 才把來源文件映射成正式 `doc_id`、固定資料切分與 `qrels.parquet`。
+DATA-001 的 37 筆本地審核中，有 34 筆是 AI 初審，不能稱為新的人類 gold labels。原始 TechQA 論文記錄了人工標註與裁決流程；原始問答檔保留每題的正確文件 `DOCUMENT`、候選文件 `DOC_IDS` 和答案字元位置。原始壓縮檔與 NVIDIA 版本均固定 revision 並記錄 SHA-256。程式驗證 910 筆題號、問題、答案、可回答標記及正向文件對齊，對 610 筆可回答題逐字核對文件文字。
 
-## 預定的標註紀錄
+## 交付
 
-每一列對應一個 `(query_id, source_filename, source_text_sha256)`，至少記：
-
-| 欄位 | 用途 |
+| 檔案 | 用途 |
 |---|---|
-| `dataset_revision`, `raw_train_sha256` | 固定問題與文件的來源版本 |
-| `query_id`, `source_filename`, `source_text_sha256` | 可重建的問題與文件對應；正式 `doc_id` 由 DATA-002 產生 |
-| `relevance` | `1` 相關、`0` 不相關；不確定先不寫入正式 qrels |
-| `label_source`, `review_status` | 區分 `source_context`、`ai_suggested`、`human_verified` 及草稿／已確認 |
-| `reviewer`, `review_reason`, `reviewed_at` | 誰在何時依什麼證據確認 |
+| `data/manifests/original_techqa_snapshot.json` | 原始壓縮檔及抽出檔案的版本、大小、SHA-256 與來源授權紀錄 |
+| `data/manifests/curated_upstream_qrels.csv` | 595 筆來源人工標註、經文件與答案範圍核對的正向文件 qrels |
+| `data/manifests/data003_exclusions.csv` | 15 筆未採用的可回答題及排除原因 |
+| `data/manifests/original_candidate_pools.json` | 910 題原始候選文件範圍，供解讀不可回答標記 |
+| `reports/data003_labels.md`、`.json` | 統計、來源說明、限制與產物雜湊 |
 
-不可回答題沒有來源 context，須另行記錄題目層級的 `is_impossible` 審核；不能虛構 `(query_id, doc_id, relevance=0)` 代表整個 corpus 都不相關。某份文件沒被抽到，也不能直接算負例。
+每筆 qrel 有 `query_id`、原始文件 ID、來源檔名、文件內容 SHA-256、答案範圍、`label_source` 和本地審核狀態。`label_source=original_techqa_human_annotated` 表示原始資料的人類標註；原始檔未提供逐列審核者姓名或日期，故未捏造。`local_review_status` 區分使用者協助確認、AI 初審與未抽樣；AI 初審只用來排除有疑慮的列，沒有升格為人類標註。
 
-## 執行順序
+300 筆 `ANSWERABLE=N` 只表示原始候選文件中沒有找到答案；本任務沒有將其轉為完整 corpus 的負標籤。輸出的正向 qrels 是文件層級且可能不完整，之後只能評估「已知相關文件」的檢索表現。
 
-1. 從現有 37 筆審核草稿開始。先複核 `DEV_Q176`、`DEV_Q067`、`DEV_Q110`、`TRAIN_Q162`、`DEV_Q127`、`TRAIN_Q196`，保留無法確認的 `unsure`。
-2. 對明確的問題與文件配對記錄文件中的支持片段、審核者與判斷理由。技術細節無法判斷時保留草稿，找具領域知識的人複核，或改用具獨立標註的資料來源。
-3. 寫小型匯入程式與測試，驗證來源 SHA、ID、文件內容指紋、重複鍵及標註狀態。只有 `human_verified` 且判斷明確的列可輸出到 gold qrels；AI 初審與來源 context 可另存為弱標籤。
-4. 產生標註數量、爭議案例與排除理由的報告。完成後交給 DATA-002 建正式資料表與固定 split；測試集不可由 AI 初審或未確認的弱標籤冒充 gold。
+## 重跑
 
-**驗收依據：** 可追溯的人工確認紀錄、來源版本與文件指紋、明確的排除清單、驗證測試，以及清楚區分 gold 與 weak labels 的匯出結果。尚未完成這些項目前，DATA-003 保持 `IN_PROGRESS`。
+在 repo 根目錄的 WSL 環境執行：
+
+```bash
+uv run python -m scripts.extract_original_techqa
+uv run python -m scripts.build_data003_labels
+uv run pytest -q
+uv run ruff check .
+uv run ruff format --check .
+```
+
+第一個命令會下載約 2.96 GB 的固定原始壓縮檔到 Hugging Face 快取，只把本任務需要的問答、Technote 與授權檔抽至 Git 排除的 `data/raw/`。第二個命令驗證兩份來源檔雜湊與內容對應，再重建 CSV、JSON 及報告。DATA-002 接著需要建立正式 `doc_id`、固定 split 與防洩漏測試；不可直接把原始 TRAIN/DEV 前綴當本專案的 train/test 切分。

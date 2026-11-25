@@ -30,9 +30,9 @@ dataset_revision,query_id,context_id,selection_reason,relevant_yes_no,answer_sup
 0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q020,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),來源沒有 context；corpus 的 swg24041964.txt 提供 WAS 8.5.5.3 ODR OOM 修補候選，但其觸發條件與題目不完全相同。
 0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q086,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),來源沒有 context；corpus 有 BPM JDBC driver 文件，但未找到 DB2 10.1.0 驅動下載位置的直接答案。
 0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q290,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),來源沒有 context；corpus 詞彙搜尋未找到 SPSS 24 Mac 授權移轉的直接答案，無法證明整個 corpus 均不可回答。
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q196,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),corpus 的 swg22014367.txt 有同一 CVE 與 MQ 8 修補段落，但擷取文字只留下「here」而沒有修補連結或版本；尚不足以確認能回答具體修補方法。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q196,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),corpus 的 swg22014367.txt 有同一 CVE 與 MQ 8 修補段落，但不在原始 50 份候選文件內，且擷取後缺實際修補連結；不能據此否定來源的候選範圍內不可回答標記。
 0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q326,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),來源沒有 context；corpus 詞彙搜尋未找到既有 Portal cluster 更改安裝目錄與 cell 名稱的直接答案。
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q127,,random_impossible,N/A,N/A,no,Codex (AI preliminary review),題目問在哪裡找到指定安全公告；corpus 的 swg21700720.txt 列出該公告的完整名稱與連結，已能提供查找位置，但外部公告全文不在 corpus。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q127,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),原始候選文件 swg21700720.txt 有指定公告的連結，但沒有公告全文；原始標註要求在候選文件中找到答案文字，因此此連結是否足以算答案仍不確定。
 0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q293,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),來源沒有 context；corpus 有其他 IBM 產品的閏秒文件，未找到 Portal 專屬的直接答案。
 0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q014,72b17b1b082c4ea9ba04333e5527649036acda9d552dbac713da69821dca3bb2,targeted_empty_answer,yes,N/A,N/A,Codex (AI preliminary review),context 與可回答配對 TRAIN_Q299 相同且包含從 WAS V8.0 起的答案，但此來源列的參考答案為空。
 0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q094,2a7a80494b7919e277ab0294b8a97c38c2ca2598a8c760fc3431dac110503506,targeted_empty_answer,yes,N/A,N/A,Codex (AI preliminary review),context 是 DataPower 虛擬版升降級路徑文件，與問題相關；此來源列的參考答案為空，不能判答案支持度。

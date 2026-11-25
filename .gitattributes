@@ -1,0 +1,5 @@
+data/manifests/*.csv text eol=lf
+data/manifests/*.json text eol=lf
+reports/*.csv text eol=lf
+reports/*.json text eol=lf
+reports/data003_labels.md text eol=lf

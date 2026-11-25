@@ -1,38 +1,38 @@
 dataset_revision,query_id,context_id,selection_reason,relevant_yes_no,answer_supported,impossible_label_valid,reviewer,reason
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q019,77f69c77a070d420c52dcfd7f3117bf782c426d68103d1405dee2e17080979bc,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q221,c8f2ed1396e64b869f28b8d22183b5e105b723f5cde2004c67e6a7ffe8fd6b93,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q411,8b58da2ef80c69caa6b8d4963c157036374019ce9493022221fabfeaa12bb0d5,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q561,202556b9cc72d7e749688f733154cf0b651779ea22b09c4fba5a1ba6dea0cfe2,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q117,a83583209b1da20ed6225945903493a8d7792543d85a1a5ddcebb97d22eef671,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q067,618d0e1f3c3012c83c7b40d8929d58b75c8c276cb631930fc277c539d91493ad,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q505,70048224d241c5078f45cc78c7c5fa42844a4788ad14baded1fd052219f07228,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q338,3e735010a543008e50fc204d67a9d893ddc9bfb042588f880c1880f8545c2dcf,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q034,ed0560d6a7b881ac71bd915022eb4876f1b4351abdf23a08f0e3034e337e6885,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q448,df678458eb9563c45a76c143346ffd5d0dffdad03839e15fc7113c233a67ccd7,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q254,18ec92be7bd8af8bc80d3f88b1973612bf59aa6ef839e5c0881ce465f000f179,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q198,0609d8f77254fad671caec9f8bd74ee4f41bfd48b38822cf14d2cb198382b01e,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q110,1c6d3fea6a5818c2f93a4f3b8bf72d511f2439ff34a49ceb655122a441eeb72f,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q215,a88010c76bd53d8d8dae061a6d5eca04c4ff12b8c0e64bb9386e2cb5d8fe1ac4,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q082,4576cfb96121a1a8871b0f1a4b7cda93b189a21b6ea3e6a879c53b7320982e57,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q043,215698eb1b2287b8ebc08d354966c5e850743441735c19a5723b76304ac37035,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q174,ac368659ce0b459ffd634c2c854f02c306ebd5c8b581a934ffc6a928ba1c1db2,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q568,c3a233063252a5545db9b6482b755eae5ede713045ede4f958c504d561c8123b,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q029,991d52c5e0d23e204e69d94731147942d6d9aa58788fcd105036296158a1e4fe,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q176,639717b8fcf8ee7bb49c45ddf8b63a8f0c449d268461a3dfb22b4521cf617e9a,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q113,ee5c9cdb3b8fc558866a90276ab0ec3506fe0da97fe5d7c1ea11108c9a446940,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q162,381c31a5edd0ec0487864393bf746fc397246b03a14e3f08400bd62643e342ad,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q386,40000a8535830a7272e5bd1321aafbe62997ff80b6121218247c3a4a15a975a0,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q234,54f7eea71c99ab60fd6c1c88146fc6c549e4722bac248a7e025eb5d1f9641c8d,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q299,72b17b1b082c4ea9ba04333e5527649036acda9d552dbac713da69821dca3bb2,random_answerable,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q173,,random_impossible,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q278,,random_impossible,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q088,,random_impossible,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q020,,random_impossible,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q086,,random_impossible,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q290,,random_impossible,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q196,,random_impossible,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q326,,random_impossible,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q127,,random_impossible,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q293,,random_impossible,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q014,72b17b1b082c4ea9ba04333e5527649036acda9d552dbac713da69821dca3bb2,targeted_empty_answer,,,,,
-0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q094,2a7a80494b7919e277ab0294b8a97c38c2ca2598a8c760fc3431dac110503506,targeted_empty_answer,,,,,
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q019,77f69c77a070d420c52dcfd7f3117bf782c426d68103d1405dee2e17080979bc,random_answerable,yes,yes,N/A,Tristan (Codex-assisted),文件為對應的 IBM 安全公告；SUMMARY 直接列出參考答案所述受影響版本。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q221,c8f2ed1396e64b869f28b8d22183b5e105b723f5cde2004c67e6a7ffe8fd6b93,random_answerable,yes,yes,N/A,Tristan (Codex-assisted),文件討論 Case Analyzer 的 BATCH 設定並提供參考答案的 SQL；但未直接證實能解決題目中的 query plan 錯誤。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q411,8b58da2ef80c69caa6b8d4963c157036374019ce9493022221fabfeaa12bb0d5,random_answerable,yes,yes,N/A,Tristan (Codex-assisted),文件列出 IBM Content Collector 4.0.1 不同 Fix Pack 對 Domino 9.0.1 各修補版本的支援關係，與參考答案相符。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q561,202556b9cc72d7e749688f733154cf0b651779ea22b09c4fba5a1ba6dea0cfe2,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件描述同一個 ADMA5026E 升級錯誤並包含參考答案的 Dmgr 處理步驟。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q117,a83583209b1da20ed6225945903493a8d7792543d85a1a5ddcebb97d22eef671,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件摘要明確說這些產品支援 Oracle JDK 7 而不支援 JDK 8。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q067,618d0e1f3c3012c83c7b40d8929d58b75c8c276cb631930fc277c539d91493ad,random_answerable,unsure,yes,N/A,Codex (AI preliminary review),答案的 connectTimeout 設定逐字出現在文件，但文件主題是 Manage Group 搜尋與 LDAP timeout，未直接描述題目的啟動時 group replication lock。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q505,70048224d241c5078f45cc78c7c5fa42844a4788ad14baded1fd052219f07228,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件是 SPSS 學生與 GradPack 支援說明，明確建議安裝或授權問題聯絡銷售廠商。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q338,3e735010a543008e50fc204d67a9d893ddc9bfb042588f880c1880f8545c2dcf,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件描述相同的 Datacap Desktop 錯誤，並明確指出 DCO 名稱大小寫需一致。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q034,ed0560d6a7b881ac71bd915022eb4876f1b4351abdf23a08f0e3034e337e6885,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件是 ITNM 4.2 Fix Pack 3 下載說明且含參考答案的連結；該連結指向版本說明，未直接提供下載檔。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q448,df678458eb9563c45a76c143346ffd5d0dffdad03839e15fc7113c233a67ccd7,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件問答直接說明 AppScan Enterprise 不能將詳細安全問題匯出成 XML。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q254,18ec92be7bd8af8bc80d3f88b1973612bf59aa6ef839e5c0881ce465f000f179,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件記載同一 IKJ79154I reason code 4，並指出缺少 FEK.CMD.SEND 的 FACILITY 類別設定。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q198,0609d8f77254fad671caec9f8bd74ee4f41bfd48b38822cf14d2cb198382b01e,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件是同一 CVE-2016-1000232 安全公告，含參考答案的漏洞說明與受影響版本。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q110,1c6d3fea6a5818c2f93a4f3b8bf72d511f2439ff34a49ceb655122a441eeb72f,random_answerable,unsure,yes,N/A,Codex (AI preliminary review),文件支持清除連線池的命令，但未直接提到資料庫套用 Microsoft 修補後 WAS 掛住的原因。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q215,a88010c76bd53d8d8dae061a6d5eca04c4ff12b8c0e64bb9386e2cb5d8fe1ac4,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件是 ITNM 隨附 WAS 的 CVE-2017-1194 安全公告，提供參考答案所指的詳情連結。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q082,4576cfb96121a1a8871b0f1a4b7cda93b189a21b6ea3e6a879c53b7320982e57,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件是同一 CVE-2017-1694 安全公告，含參考答案的漏洞描述。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q043,215698eb1b2287b8ebc08d354966c5e850743441735c19a5723b76304ac37035,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件說明 ITNM 4.2 Fix Pack 1 的 Passport Advantage 下載與安裝步驟，與參考答案相符。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q174,ac368659ce0b459ffd634c2c854f02c306ebd5c8b581a934ffc6a928ba1c1db2,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件描述同一個 WCM Subscribe Now 空白畫面並列出參考答案的修正步驟。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q568,c3a233063252a5545db9b6482b755eae5ede713045ede4f958c504d561c8123b,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件說明 Portal 6.1.0.1 的 session timeout 轉址行為及後續版本差異。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q029,991d52c5e0d23e204e69d94731147942d6d9aa58788fcd105036296158a1e4fe,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件描述同一 DWC 與 TWS 連線錯誤，指出 SSLv3 停用造成版本間無法連線。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q176,639717b8fcf8ee7bb49c45ddf8b63a8f0c449d268461a3dfb22b4521cf617e9a,random_answerable,no,yes,N/A,Codex (AI preliminary review),參考答案雖逐字出現在文件，但問題問 Extreme Scale 的閏秒；文件回答 Application Server 的閏年，產品與時間概念都不同。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q113,ee5c9cdb3b8fc558866a90276ab0ec3506fe0da97fe5d7c1ea11108c9a446940,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件直接列出 Atlas Extensions 的 logging 設定檔、屬性與重啟步驟。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q162,381c31a5edd0ec0487864393bf746fc397246b03a14e3f08400bd62643e342ad,random_answerable,unsure,yes,N/A,Codex (AI preliminary review),文件提到同一 PI50993 修補後的 NoClassDefFoundError 與函式庫處理，但題目描述的是 VerifyError，無法確認同一故障。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q386,40000a8535830a7272e5bd1321aafbe62997ff80b6121218247c3a4a15a975a0,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件是同一安全公告，明確列出 CVE-2014-6593 的內容。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q234,54f7eea71c99ab60fd6c1c88146fc6c549e4722bac248a7e025eb5d1f9641c8d,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件說明 WASServiceCmd.exe 可協助建立 Windows service，並列出參考答案的使用步驟。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q299,72b17b1b082c4ea9ba04333e5527649036acda9d552dbac713da69821dca3bb2,random_answerable,yes,yes,N/A,Codex (AI preliminary review),文件明確說明從 WebSphere V8.0 起 fix pack 同時包含 WAS 與 Java SDK 更新。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q173,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),來源沒有 context；corpus 詞彙搜尋找到相關 FileNet 文件，但未確認有文件回答 Sweep filter 的 LIKE 與特殊字元用法。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q278,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),來源沒有 context；corpus 有 Messaging Engine UUID 相關文件，但未找到可否改回舊 UUID 的直接答案。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q088,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),來源沒有 context；corpus 有 GHOST 與 SOA Policy 相關公告，但目前找到的文件未同時對上指定產品與 CVE。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q020,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),來源沒有 context；corpus 的 swg24041964.txt 提供 WAS 8.5.5.3 ODR OOM 修補候選，但其觸發條件與題目不完全相同。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q086,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),來源沒有 context；corpus 有 BPM JDBC driver 文件，但未找到 DB2 10.1.0 驅動下載位置的直接答案。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q290,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),來源沒有 context；corpus 詞彙搜尋未找到 SPSS 24 Mac 授權移轉的直接答案，無法證明整個 corpus 均不可回答。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q196,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),corpus 的 swg22014367.txt 有同一 CVE 與 MQ 8 修補段落，但擷取文字只留下「here」而沒有修補連結或版本；尚不足以確認能回答具體修補方法。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q326,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),來源沒有 context；corpus 詞彙搜尋未找到既有 Portal cluster 更改安裝目錄與 cell 名稱的直接答案。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q127,,random_impossible,N/A,N/A,no,Codex (AI preliminary review),題目問在哪裡找到指定安全公告；corpus 的 swg21700720.txt 列出該公告的完整名稱與連結，已能提供查找位置，但外部公告全文不在 corpus。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,TRAIN_Q293,,random_impossible,N/A,N/A,unsure,Codex (AI preliminary review),來源沒有 context；corpus 有其他 IBM 產品的閏秒文件，未找到 Portal 專屬的直接答案。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q014,72b17b1b082c4ea9ba04333e5527649036acda9d552dbac713da69821dca3bb2,targeted_empty_answer,yes,N/A,N/A,Codex (AI preliminary review),context 與可回答配對 TRAIN_Q299 相同且包含從 WAS V8.0 起的答案，但此來源列的參考答案為空。
+0b5bbc84b7f07d6d09d063130e90b716d8d4a32a,DEV_Q094,2a7a80494b7919e277ab0294b8a97c38c2ca2598a8c760fc3431dac110503506,targeted_empty_answer,yes,N/A,N/A,Codex (AI preliminary review),context 是 DataPower 虛擬版升降級路徑文件，與問題相關；此來源列的參考答案為空，不能判答案支持度。

@@ -48,3 +48,5 @@ uv run python scripts/audit_dataset.py
 執行指令會核對 pinned revision、來源 schema、原始 JSON 列數與 Datasets loader 列數。人工審核欄位目前留空；稽核報告將來源 contexts 視為待確認的 relevance 候選。原始檔案未納入 Git，其他機器可用相同 config 重新下載並核對 manifest 中的雜湊。
 
 人工審核時，依 `query_id` 在本地審核包查 question、answer 和 contexts，將結果填入 `reports/relevance_review.csv`。可回答題判斷 context 是否切題及能否支持答案；不可回答題檢查標記是否合理，沒有 context 的兩個欄位填 `N/A`。每列填審核者與理由。判斷標準和待決事項見稽核報告的「人工審核樣本」。
+
+37 筆樣本已填入逐筆初審結果，統計與爭議案例見 [審核摘要](reports/relevance_review_summary.md)。其中 34 筆為 AI 初審，仍需人類複核後才能決定 Gate A。

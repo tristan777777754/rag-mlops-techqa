@@ -12,11 +12,11 @@
 | Active task | `DATA-001` |
 | Status | `IN_PROGRESS` |
 | Completed | `2 / 19`（以表格任務 ID 為準） |
-| Current blocker | 37 筆抽樣的人工作答與 Gate A 判定待完成；來源標記不可直接當 gold label |
+| Current blocker | 37 筆已填初審結果，其中 34 筆為 AI 初審；爭議案例與 Gate A 尚待人類複核 |
 | Last verified Git commit | DATA-001 稽核提交見 `git log -1`；前一筆 REPO-001 為 `153794e` |
 | Last passing tests | `uv run pytest -q`：12 passed；`uv run ruff check .`、`uv run ruff format --check .`、`uv lock --check` 通過 |
 | Next task after active | Gate A 決策後，依結果進行 `DATA-003` 或 `DATA-002` |
-| Last session summary | 固定版本 raw snapshot、SHA-256 manifest、910 列完整稽核、corpus 核對與 37 筆人工審核表已建立；人工審核尚未填寫 |
+| Last session summary | 37 筆抽樣已逐筆初審；25 筆有答案題中 21 筆 context 切題、1 筆不切題、3 筆不確定；10 筆不可回答題有 1 筆 corpus 反例 |
 
 ## 任務清單
 
@@ -63,11 +63,21 @@
 
 | Gate | 必須回答的問題 | Decision | Evidence |
 |---|---|---|---|
-| A — data labels | contexts 能作為 relevant evidence 嗎？weak/gold 分得清楚嗎？ | `PENDING` | `reports/dataset_audit.md`、`reports/relevance_review.csv`；37 筆待人工審核 |
+| A — data labels | contexts 能作為 relevant evidence 嗎？weak/gold 分得清楚嗎？ | `PENDING` | `reports/relevance_review.csv`、`reports/relevance_review_summary.md`；34 筆 AI 初審待人類複核 |
 | B — evaluation | 無 leakage，baseline 在 fixed corpus + val qrels 上可重跑嗎？ | `PENDING` | — |
 | C — release | model/index 相容、品質/安全 gate pass、人工批准嗎？ | `PENDING` | — |
 
 ## 每次 Session Log（新一筆加在最上面）
+
+### 2026-11-25 — DATA-001 抽樣 AI 初審
+
+- **Goal:** 依問題、參考答案、來源 context 與 corpus 候選文件逐筆審核 37 筆固定抽樣。
+- **Changed files:** 更新 `reports/relevance_review.csv`、`README.md`、`TASK_TRACKER.md`；新增 `reports/relevance_review_summary.md`。本地檢索輔助程式保存在 Git 排除的 `data/review/`。
+- **Commands executed and actual results:** 對照 25 筆可回答題的提供文件，並對 10 筆不可回答題在 28,481 個 corpus 文件中做詞彙候選搜尋。25 筆有參考答案題的 context 切題性為 21 `yes`、1 `no`、3 `unsure`；10 筆不可回答題的標記有效性為 1 `no`、9 `unsure`；另 2 筆空答案題 context 相關但無答案可核對。重跑 `uv run python scripts/audit_dataset.py` 成功，審核 CSV 的 Git blob hash 前後同為 `2b83b70ad7f42625493f367cf92875da609241cf`，37 列及必填審核欄位均通過檢查。
+- **Evidence:** `reports/relevance_review.csv` 保留每筆判斷、理由與審核者；`reports/relevance_review_summary.md` 記錄重大案例。前三筆由 Tristan 在 Codex 協助下確認，其餘 34 筆明記為 AI 初審。
+- **Blocker / risks:** `DEV_Q176` 文件與問題不切題；`DEV_Q127` 雖標為不可回答，corpus 卻提供指定公告的查找連結。`TRAIN_Q196` 有修補候選但連結擷取不完整，維持不確定。AI 初審不能取代人類複核，也不能因此把來源標記當 gold label。
+- **Status change:** `IN_PROGRESS` 維持，Gate A `PENDING`。
+- **Next single task:** 人類複核爭議案例及樣本判斷，決定 Gate A；若錯標獲確認，進入 `DATA-003`。
 
 ### 2026-11-25 — DATA-001 固定來源與完整稽核
 

@@ -1,22 +1,22 @@
 # TechQA RAG MLOps — Task Tracker
 
-> 更新日期：2026-11-25
+> 更新日期：2026-11-26
 > **目前階段：ENV-001、REPO-001、DATA-001、DATA-003 已完成；Gate A 對 NVIDIA 來源 contexts 直接作 gold 的使用不放行**
-> **下一項任務：DATA-002**。
+> **進行中：DATA-002**。
 > 指令與驗收見 [`EXECUTION_GUIDE.md`](EXECUTION_GUIDE.md)。**每次開工先讀本檔。**
 
 ## Dashboard（每次結束工作務必更新）
 
 | 欄位 | 目前內容 |
 |---|---|
-| Active task | 無；下一項 `DATA-002` |
-| Status | `DATA-003 DONE`；`DATA-002 TODO` |
+| Active task | `DATA-002` |
+| Status | `DATA-003 DONE`；`DATA-002 IN_PROGRESS` |
 | Completed | `4 / 19`（以表格任務 ID 為準） |
-| Current blocker | 尚無固定 split；595 筆只含已知正向文件，不能當成完整相關性標註 |
+| Current blocker | DATA-002 尚待 chunking 與整體驗收；595 筆只含已知正向文件 |
 | Last verified Git commit | 以 `git log -1` 為準；DATA-003 程式與報告見下方 session log |
-| Last passing tests | `uv run pytest -q`：17 passed；`uv run ruff check .`、`uv run ruff format --check .`、`uv lock --check` 通過 |
-| Next task after active | `DATA-002`：建立 documents/queries/qrels/chunks、固定 split 與防洩漏測試 |
-| Last session summary | DATA-003 對齊原始 TechQA 人工標註與 NVIDIA 版本，輸出 595 筆正向 qrels、15 筆排除、910 題原始候選範圍 |
+| Last passing tests | `uv run pytest -q`：18 passed；`uv run ruff check .`、`uv run ruff format --check .`、`uv lock --check` 通過 |
+| Next task after active | `DATA-004`，待 DATA-002 驗收後開始 |
+| Last session summary | DATA-002 凍結 761 組、910 題的切分；train／val／test 為 638／136／136 題 |
 
 ## 任務清單
 
@@ -68,6 +68,12 @@
 | C — release | model/index 相容、品質/安全 gate pass、人工批准嗎？ | `PENDING` | — |
 
 ## 每次 Session Log（新一筆加在最上面）
+
+### 2026-11-26 — DATA-002 題目切分凍結
+
+- **Evidence:** `scripts/freeze_data002_split.py` 更新本地 `queries.parquet` 並產生 `data/manifests/split_manifest.json`，SHA-256 為 `74b87dc927c77cc7af1c454a16a5211fe37e850058e35a3a51a293b42c9a4ed5`。以 seed 42 分配 761 組。Train／val／test 具正向 qrel 的題數為 417／89／89，不可回答題數為 210／45／45。
+- **Validation:** WSL 重跑切分雜湊相同，反轉輸入順序結果相同，同組未跨 split。 `uv run pytest -q` 為 18 passed，Ruff lint／format 和 `uv lock --check` 通過。
+- **Next:** DATA-002 維持進行中，待建 `chunks.parquet` 與整體驗收。
 
 ### 2026-11-25 — DATA-003 原始人工標註對齊完成
 

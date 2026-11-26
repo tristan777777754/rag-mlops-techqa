@@ -60,4 +60,14 @@ uv run python -m scripts.extract_original_techqa
 uv run python -m scripts.build_data003_labels
 ```
 
-第一個命令取得固定版本的原始 TechQA 壓縮檔（約 2.96 GB），只抽出需要的問答、Technote 與授權檔到 Git 排除的 `data/raw/`。第二個命令核對兩份資料的版本、雜湊、題目、答案、正確文件及答案位置，產生 [595 筆正向 qrels](data/manifests/curated_upstream_qrels.csv)、[15 筆排除清單](data/manifests/data003_exclusions.csv)、[原始候選文件範圍](data/manifests/original_candidate_pools.json)與 [結果報告](reports/data003_labels.md)。這些標註尚未建立本專案的固定 train/validation/test 切分；下一步 `DATA-002` 才會處理分組與防洩漏。重跑說明及限制見 [DATA-003 標註計畫](docs/DATA003_LABEL_PLAN.md)。
+第一個命令取得固定版本的原始 TechQA 壓縮檔（約 2.96 GB），只抽出需要的問答、Technote 與授權檔到 Git 排除的 `data/raw/`。第二個命令核對兩份資料的版本、雜湊、題目、答案、正確文件及答案位置，產生 [595 筆正向 qrels](data/manifests/curated_upstream_qrels.csv)、[15 筆排除清單](data/manifests/data003_exclusions.csv)、[原始候選文件範圍](data/manifests/original_candidate_pools.json)與 [結果報告](reports/data003_labels.md)。重跑說明及限制見 [DATA-003 標註計畫](docs/DATA003_LABEL_PLAN.md)。
+
+## DATA-002 題目切分
+
+有固定版原始題目以及本地的 `data/processed/queries.parquet`、`qrels.parquet` 和已審查的 `near_duplicate_review.csv` 後，在 WSL 專案根目錄執行：
+
+```bash
+uv run python scripts/freeze_data002_split.py
+```
+
+此命令以 seed 42 分配 761 個群組，更新題目表的 `split`、`group_id` 並核對 [切分 manifest](data/manifests/split_manifest.json)。Train／val／test 為 638／136／136 題。審查 CSV 與 Parquet 為本地輸入，須備妥相同資料才能重跑。所有 split 共用搜尋語料。Training 與 negative mining 只使用 train 的題目與標註，validation 用於選型，test 留到最終評估。不可回答標記適用原始候選範圍，已知正向 qrels 的覆蓋也有限。

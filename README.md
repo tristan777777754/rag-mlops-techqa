@@ -71,3 +71,13 @@ uv run python scripts/freeze_data002_split.py
 ```
 
 此命令以 seed 42 分配 761 個群組，更新題目表的 `split`、`group_id` 並核對 [切分 manifest](data/manifests/split_manifest.json)。Train／val／test 為 638／136／136 題。審查 CSV 與 Parquet 為本地輸入，須備妥相同資料才能重跑。所有 split 共用搜尋語料。Training 與 negative mining 只使用 train 的題目與標註，validation 用於選型，test 留到最終評估。不可回答標記適用原始候選範圍，已知正向 qrels 的覆蓋也有限。
+
+### 建立文件切塊
+
+備妥本地 `data/processed/documents.parquet` 後，在 WSL 專案根目錄執行：
+
+```bash
+uv run python scripts/build_data002_chunks.py
+```
+
+`uv` 依鎖檔安裝 `tokenizers`。第一次執行會下載固定 MiniLM revision 的 `tokenizer.json`。輸出 `data/processed/chunks.parquet`，正文上限 200 tokens，目標重疊 32 tokens，embedding 輸入上限 256 tokens。腳本會保留既有輸出。

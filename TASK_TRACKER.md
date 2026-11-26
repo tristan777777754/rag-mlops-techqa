@@ -1,22 +1,22 @@
 # TechQA RAG MLOps — Task Tracker
 
 > 更新日期：2026-11-26
-> **目前階段：ENV-001、REPO-001、DATA-001、DATA-003 已完成；Gate A 對 NVIDIA 來源 contexts 直接作 gold 的使用不放行**
-> **進行中：DATA-002**。
+> **目前階段：ENV-001、REPO-001、DATA-001、DATA-003、DATA-002 已完成；Gate A 對 NVIDIA 來源 contexts 直接作 gold 的使用不放行**
+> **下一項任務：DATA-004**。
 > 指令與驗收見 [`EXECUTION_GUIDE.md`](EXECUTION_GUIDE.md)。**每次開工先讀本檔。**
 
 ## Dashboard（每次結束工作務必更新）
 
 | 欄位 | 目前內容 |
 |---|---|
-| Active task | `DATA-002` |
-| Status | `DATA-003 DONE`；`DATA-002 IN_PROGRESS` |
-| Completed | `4 / 19`（以表格任務 ID 為準） |
-| Current blocker | DATA-002 尚待 chunking 與整體驗收；595 筆只含已知正向文件 |
+| Active task | 無 |
+| Status | `DATA-002 DONE`；`DATA-004 TODO` |
+| Completed | `5 / 19`（以表格任務 ID 為準） |
+| Current blocker | 無；595 筆已知正向文件的覆蓋限制繼續適用 |
 | Last verified Git commit | 以 `git log -1` 為準；DATA-003 程式與報告見下方 session log |
 | Last passing tests | `uv run pytest -q`：18 passed；`uv run ruff check .`、`uv run ruff format --check .`、`uv lock --check` 通過 |
-| Next task after active | `DATA-004`，待 DATA-002 驗收後開始 |
-| Last session summary | DATA-002 凍結 761 組、910 題的切分；train／val／test 為 638／136／136 題 |
+| Next task after active | `DATA-004`，以 DVC 版本化原始資料與正式產物 |
+| Last session summary | DATA-002 完成三張資料表及 195,348 個文件切塊的重建比對 |
 
 ## 任務清單
 
@@ -31,7 +31,7 @@
 
 ### Week 2：資料合約與版本
 
-- [ ] **DATA-002** — documents/queries/qrels/chunks、固定 split 與 leakage 測試；證據：`split_manifest.json` + tests。
+- [x] **DATA-002**（`DONE`）— documents/queries/qrels/chunks 重建一致，題目切分已凍結；證據見 [切分 manifest](data/manifests/split_manifest.json)、[分組測試](tests/test_freeze_data002_split.py)及下方驗收紀錄。
 - [ ] **DATA-004** — DVC 版本化 raw/processed；證據：`.dvc` metadata + `dvc status`。
 
 ### Week 3–4：三種 Baseline
@@ -68,6 +68,19 @@
 | C — release | model/index 相容、品質/安全 gate pass、人工批准嗎？ | `PENDING` | — |
 
 ## 每次 Session Log（新一筆加在最上面）
+
+### 2026-11-26 — DATA-002 重建驗收完成
+
+- **Rebuild:** 使用者在 WSL 執行 `uv run python scripts/build_data002_tables.py --output-dir data/processed/rebuild_tables`，再以重建的 `documents.parquet` 作為 `scripts/build_data002_chunks.py` 的輸入，將切塊寫入同一重建目錄。
+- **Validation:** 使用者提供的比對輸出顯示，28,481 份文件、910 道題目與 595 筆正向 qrels 的內容和欄位型別一致。195,348 個 chunks 通過 Arrow `equals(check_metadata=True)`，內容、順序與 metadata 一致。
+- **Provenance:** 資料來源為 `nvidia/TechQA-RAG-Eval` revision `0b5bbc84b7f07d6d09d063130e90b716d8d4a32a`。凍結切分使用 seed 42，train／val／test 為 638／136／136 題。切分 manifest SHA-256 為 `74b87dc927c77cc7af1c454a16a5211fe37e850058e35a3a51a293b42c9a4ed5`。
+- **Status change:** DATA-002 `IN_PROGRESS → DONE`。下一項為 DATA-004，DVC 追蹤正式產物時排除重建驗收副本 `data/processed/rebuild_tables/`。
+
+### 2026-11-26 — DATA-002 文件切塊
+
+- **Evidence:** 在 WSL 以 `uv run python scripts/build_data002_chunks.py` 處理 28,481 份文件，輸出 `data/processed/chunks.parquet`，共 195,348 塊。最大正文與 embedding 輸入分別為 200 與 256 tokens。MiniLM tokenizer 的固定 revision 與 SHA-256 存於 Parquet metadata。
+- **Validation:** 讀回並驗證全部 chunk ID 唯一、正文與母文件 offset 一致，且涵蓋全部文件。18 個測試、Ruff 與鎖檔檢查通過。
+- **Next:** DATA-002 維持進行中，待將前段正規化流程收進正式入口並完成整體驗收。
 
 ### 2026-11-26 — DATA-002 題目切分凍結
 

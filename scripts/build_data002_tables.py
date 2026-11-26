@@ -39,9 +39,7 @@ def build_documents(corpus: Path) -> tuple[list[dict], dict]:
             text = raw.decode("utf-8")
             normalized = text.replace("\r\n", "\n").replace("\r", "\n")
             normalized_hash = sha256(normalized.encode("utf-8")).hexdigest()
-            doc_id = sha256(
-                f"{filename}\n{normalized_hash}".encode("utf-8")
-            ).hexdigest()
+            doc_id = sha256(f"{filename}\n{normalized_hash}".encode()).hexdigest()
 
             key = (filename, source_hash)
             if key in doc_ids or doc_id in seen_ids:
@@ -49,13 +47,15 @@ def build_documents(corpus: Path) -> tuple[list[dict], dict]:
 
             doc_ids[key] = doc_id
             seen_ids.add(doc_id)
-            documents.append({
-                "doc_id": doc_id,
-                "source_filename": filename,
-                "source_text_sha256": source_hash,
-                "normalized_text_sha256": normalized_hash,
-                "text": text,
-            })
+            documents.append(
+                {
+                    "doc_id": doc_id,
+                    "source_filename": filename,
+                    "source_text_sha256": source_hash,
+                    "normalized_text_sha256": normalized_hash,
+                    "text": text,
+                }
+            )
 
     documents.sort(key=lambda row: row["doc_id"])
     return documents, doc_ids
@@ -102,13 +102,15 @@ def build_qrels(labels: Path, doc_ids: dict, queries: list[dict]) -> list[dict]:
                 raise ValueError(f"Invalid or duplicate positive qrel: {pair}")
 
             seen_pairs.add(pair)
-            qrels.append({
-                **row,
-                "doc_id": doc_id,
-                "relevance": int(row["relevance"]),
-                "answer_span_start": int(row["answer_span_start"]),
-                "answer_span_end": int(row["answer_span_end"]),
-            })
+            qrels.append(
+                {
+                    **row,
+                    "doc_id": doc_id,
+                    "relevance": int(row["relevance"]),
+                    "answer_span_start": int(row["answer_span_start"]),
+                    "answer_span_end": int(row["answer_span_end"]),
+                }
+            )
 
     qrels.sort(key=lambda row: (row["query_id"], row["doc_id"]))
     return qrels
@@ -122,9 +124,7 @@ def main() -> None:
         raise FileExistsError(f"Use a new output directory: {output}")
 
     manifests = Path("data/manifests")
-    snapshot = json.loads(
-        (manifests / "raw_snapshot.json").read_text(encoding="utf-8")
-    )
+    snapshot = json.loads((manifests / "raw_snapshot.json").read_text(encoding="utf-8"))
     split_manifest = json.loads(
         (manifests / "split_manifest.json").read_text(encoding="utf-8")
     )

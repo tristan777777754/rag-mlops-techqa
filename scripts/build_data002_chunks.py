@@ -1,10 +1,11 @@
+import argparse
 import json
 import os
 import re
 from hashlib import sha256
 from pathlib import Path
 from tempfile import TemporaryDirectory
-import argparse
+
 import pyarrow as pa
 import pyarrow.parquet as pq
 from huggingface_hub import hf_hub_download

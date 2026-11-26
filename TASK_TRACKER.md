@@ -1,8 +1,8 @@
 # TechQA RAG MLOps — Task Tracker
 
 > 更新日期：2026-11-26
-> **目前階段：ENV-001、REPO-001、DATA-001、DATA-003、DATA-002 已完成；Gate A 對 NVIDIA 來源 contexts 直接作 gold 的使用不放行**
-> **下一項任務：DATA-004**。
+> **目前階段：ENV-001、REPO-001、DATA-001、DATA-003、DATA-002、DATA-004 已完成；Gate A 對 NVIDIA 來源 contexts 直接作 gold 的使用不放行**
+> **下一項任務：EVAL-001**。
 > 指令與驗收見 [`EXECUTION_GUIDE.md`](EXECUTION_GUIDE.md)。**每次開工先讀本檔。**
 
 ## Dashboard（每次結束工作務必更新）
@@ -10,13 +10,13 @@
 | 欄位 | 目前內容 |
 |---|---|
 | Active task | 無 |
-| Status | `DATA-002 DONE`；`DATA-004 TODO` |
-| Completed | `5 / 19`（以表格任務 ID 為準） |
+| Status | `DATA-004 DONE`（本機驗收通過，Git 提交待完成）；`EVAL-001 TODO` |
+| Completed | `6 / 19`（以表格任務 ID 為準） |
 | Current blocker | 無；595 筆已知正向文件的覆蓋限制繼續適用 |
-| Last verified Git commit | 以 `git log -1` 為準；DATA-003 程式與報告見下方 session log |
+| Last verified Git commit | `12add3d`；DATA-004 驗收基於當時的工作區，DVC 指標尚未提交 |
 | Last passing tests | `uv run pytest -q`：18 passed；`uv run ruff check .`、`uv run ruff format --check .`、`uv lock --check` 通過 |
-| Next task after active | `DATA-004`，以 DVC 版本化原始資料與正式產物 |
-| Last session summary | DATA-002 完成三張資料表及 195,348 個文件切塊的重建比對 |
+| Next task after active | `EVAL-001`，驗證 Recall、MRR 和 nDCG 的計算 |
+| Last session summary | DVC 3.67.1 已驗證原始資料 9 個檔案與正式產物 4 個 Parquet 的本機快照 |
 
 ## 任務清單
 
@@ -32,7 +32,7 @@
 ### Week 2：資料合約與版本
 
 - [x] **DATA-002**（`DONE`）— documents/queries/qrels/chunks 重建一致，題目切分已凍結；證據見 [切分 manifest](data/manifests/split_manifest.json)、[分組測試](tests/test_freeze_data002_split.py)及下方驗收紀錄。
-- [ ] **DATA-004** — DVC 版本化 raw/processed；證據：`.dvc` metadata + `dvc status`。
+- [x] **DATA-004**（`DONE`）— DVC 版本化 raw/processed；證據：`data/raw.dvc`、`data/processed.dvc` 與下方本機驗收紀錄。
 
 ### Week 3–4：三種 Baseline
 
@@ -68,6 +68,14 @@
 | C — release | model/index 相容、品質/安全 gate pass、人工批准嗎？ | `PENDING` | — |
 
 ## 每次 Session Log（新一筆加在最上面）
+
+### 2026-11-26 — DATA-004 DVC 本機驗收完成
+
+- **Version:** WSL 執行 `uv run --locked dvc --version`，回傳 `3.67.1`。
+- **Raw snapshot:** `data/raw.dvc` 記錄 9 個檔案，共 343,604,522 bytes。已核對 cache 目錄清單，涵蓋 NVIDIA TechQA-RAG-Eval revision `0b5bbc84b7f07d6d09d063130e90b716d8d4a32a` 與原始 TechQA revision `60437bc79ab217679682217598a3693cab78365b`。目錄雜湊為 `c1158f57e9cb2e4f22c7ea91b9984b1d.dir`。
+- **Processed snapshot:** `data/processed.dvc` 記錄 `documents.parquet`、`queries.parquet`、`qrels.parquet`、`chunks.parquet`，共 128,950,979 bytes。目錄雜湊為 `4abe105326eb1ddc092dd6444ef9a160.dir`。已核對 cache 清單只有這 4 個檔案，`.dvcignore` 排除 `data/processed/rebuild_tables/` 與 `data/processed/near_duplicate_review.csv`。
+- **Validation:** `uv run --locked dvc status` 回傳 `Data and pipelines are up to date.`。`uv run --locked dvc data status` 顯示兩個新增的 DVC 快照待 Git 提交，無缺失的 cache 項目。 `uv lock --check` 通過，`uv run --locked pytest -q` 為 18 passed，`uv run --locked ruff check .` 通過，`uv run --locked ruff format --check .` 確認 22 個檔案格式符合規範。
+- **Status change:** DATA-004 `TODO → DONE`，本機驗收通過。`.dvcignore` 與兩份 DVC 指標待 Git 提交。本次未驗證從另一台機器拉取資料。下一項為 EVAL-001。
 
 ### 2026-11-26 — DATA-002 重建驗收完成
 
